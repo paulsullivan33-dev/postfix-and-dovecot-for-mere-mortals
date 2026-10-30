@@ -1,0 +1,40 @@
+$ openssl s_client -connect 127.0.0.1:1993 -brief </dev/null   (the TLS handshake and the certificate)
+Can't use SSL_get_servername
+depth=0 CN = mail.example.org
+CONNECTION ESTABLISHED
+Protocol version: TLSv1.3
+Ciphersuite: TLS_AES_256_GCM_SHA384
+Peer certificate: CN = mail.example.org
+Hash used: SHA256
+Signature type: RSA-PSS
+Verification error: self-signed certificate
+Server Temp Key: X25519, 253 bits
+* OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+ AUTH=PLAIN AUTH=LOGIN] Dovecot (Ubuntu) ready.
+DONE
+
+$ python3 fetch_mail.py --tls   (IMAPS, 127.0.0.1:1993)
+server greeting: * OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+ AUTH=PLAIN AUTH=LOGIN] Dovecot (Ubuntu) ready.
+login OK as bob@example.org
+INBOX selected: 1 message(s)
+--- message 1, exactly as stored ---
+Return-Path: <alice@example.org>
+X-Original-To: bob@example.org
+Delivered-To: bob@example.org
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by mail.example.org (Postfix) with ESMTP id 202D82212BD
+	for <bob@example.org>; Fri, 30 Oct 2026 04:17:16 +0000 (UTC)
+From: Alice <alice@example.org>
+To: Bob <bob@example.org>
+Subject: First lab letter
+Message-Id: <20261030041716.202D82212BD@mail.example.org>
+Date: Fri, 30 Oct 2026 04:17:16 +0000 (UTC)
+
+Hello Bob,
+
+This letter travelled the whole lab: in through SMTP to Postfix,
+delivered into your Maildir, and it is waiting for Dovecot to hand
+it back over IMAP.
+
+-- Alice
+
+logout OK

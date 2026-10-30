@@ -1,0 +1,15 @@
+$ SMTP to an address that does not exist here (carol@example.org)
+refused: {'carol@example.org': (550, b'5.1.1 <carol@example.org>: Recipient address rejected: User unknown in local recipient table')}
+
+$ IMAP login with the wrong password
+login refused: b'[AUTHENTICATIONFAILED] Authentication failed.'
+
+$ SMTP to postmaster@example.org (an alias: postmaster -> root -> bob)
+sent
+
+$ the delivery lines from the Postfix log
+Oct 30 04:19:04 mail postfix/smtpd[55030]: NOQUEUE: reject: RCPT from localhost[127.0.0.1]: 550 5.1.1 <carol@example.org>: Recipient address rejected: User unknown in local recipient table; from=<alice@example.org> to=<carol@example.org> proto=ESMTP helo=<[127.0.0.1]>
+Oct 30 04:19:06 mail postfix/local[55328]: 338EB2262A7: to=<bob@example.org>, orig_to=<postmaster@example.org>, relay=local, delay=0.07, delays=0.03/0.02/0/0.02, dsn=2.0.0, status=sent (delivered to maildir)
+
+$ doveadm mailbox status (INBOX now holds both letters)
+INBOX messages=2

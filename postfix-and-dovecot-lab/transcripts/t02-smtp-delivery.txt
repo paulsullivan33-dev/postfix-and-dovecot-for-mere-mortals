@@ -1,0 +1,61 @@
+$ python3 send_test_mail.py   (SMTP to 127.0.0.1:2525, alice@example.org -> bob@example.org)
+send: 'ehlo [127.0.0.1]\r\n'
+reply: b'250-mail.example.org\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-SIZE 10240000\r\n'
+reply: b'250-VRFY\r\n'
+reply: b'250-ETRN\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-DSN\r\n'
+reply: b'250-SMTPUTF8\r\n'
+reply: b'250 CHUNKING\r\n'
+reply: retcode (250); Msg: b'mail.example.org\nPIPELINING\nSIZE 10240000\nVRFY\nETRN\nENHANCEDSTATUSCODES\n8BITMIME\nDSN\nSMTPUTF8\nCHUNKING'
+send: 'mail FROM:<alice@example.org> size=269\r\n'
+reply: b'250 2.1.0 Ok\r\n'
+reply: retcode (250); Msg: b'2.1.0 Ok'
+send: 'rcpt TO:<bob@example.org>\r\n'
+reply: b'250 2.1.5 Ok\r\n'
+reply: retcode (250); Msg: b'2.1.5 Ok'
+send: 'data\r\n'
+reply: b'354 End data with <CR><LF>.<CR><LF>\r\n'
+reply: retcode (354); Msg: b'End data with <CR><LF>.<CR><LF>'
+data: (354, b'End data with <CR><LF>.<CR><LF>')
+send: b'From: Alice <alice@example.org>\r\nTo: Bob <bob@example.org>\r\nSubject: First lab letter\r\n\r\nHello Bob,\r\n\r\nThis letter travelled the whole lab: in through SMTP to Postfix,\r\ndelivered into your Maildir, and it is waiting for Dovecot to hand\r\nit back over IMAP.\r\n\r\n-- Alice\r\n.\r\n'
+reply: b'250 2.0.0 Ok: queued as 202D82212BD\r\n'
+reply: retcode (250); Msg: b'2.0.0 Ok: queued as 202D82212BD'
+data: (250, b'2.0.0 Ok: queued as 202D82212BD')
+send: 'QUIT\r\n'
+reply: b'221 2.0.0 Bye\r\n'
+reply: retcode (221); Msg: b'2.0.0 Bye'
+sent OK
+
+$ find homes/bob/Maildir -type f   (what Postfix delivered)
+/home/hatch/workspace/postfix-labwork/homes/bob/Maildir/new/1793333836.V58I2212c0M149470.htch-runtime
+
+$ cat the delivered message
+Return-Path: <alice@example.org>
+X-Original-To: bob@example.org
+Delivered-To: bob@example.org
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by mail.example.org (Postfix) with ESMTP id 202D82212BD
+	for <bob@example.org>; Fri, 30 Oct 2026 04:17:16 +0000 (UTC)
+From: Alice <alice@example.org>
+To: Bob <bob@example.org>
+Subject: First lab letter
+Message-Id: <20261030041716.202D82212BD@mail.example.org>
+Date: Fri, 30 Oct 2026 04:17:16 +0000 (UTC)
+
+Hello Bob,
+
+This letter travelled the whole lab: in through SMTP to Postfix,
+delivered into your Maildir, and it is waiting for Dovecot to hand
+it back over IMAP.
+
+-- Alice
+
+$ grep the delivery lines in the Postfix log
+Oct 30 04:17:16 mail postfix/smtpd[47358]: 202D82212BD: client=localhost[127.0.0.1]
+Oct 30 04:17:16 mail postfix/qmgr[44516]: 202D82212BD: from=<alice@example.org>, size=546, nrcpt=1 (queue active)
+Oct 30 04:17:16 mail postfix/local[47372]: 202D82212BD: to=<bob@example.org>, relay=local, delay=0.04, delays=0.02/0/0/0.02, dsn=2.0.0, status=sent (delivered to maildir)
+Oct 30 04:17:16 mail postfix/qmgr[44516]: 202D82212BD: removed

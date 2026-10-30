@@ -1,0 +1,28 @@
+site_name: Postfix & Dovecot for Mere Mortals
+site_description: Running your own mail server with Postfix and Dovecot. Accepting mail over SMTP, storing it in Maildir folders, handing it back over IMAP with TLS, and the DNS records that make the rest of the internet believe you, with the hard parts stated plainly.
+site_url: https://paulsullivan33-dev.github.io/postfix-and-dovecot-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text CC BY 4.0, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What a Mail Server Is: what-a-mail-server-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Before You Start: before-you-start.md
+  - Installing Postfix and Dovecot: installing.md
+  - Postfix, the Front Door: postfix-the-front-door.md
+  - Your First Delivery: your-first-delivery.md
+  - Dovecot, the Postroom: dovecot-the-postroom.md
+  - Reading Your Mail: reading-your-mail.md
+  - TLS and Passwords: tls-and-passwords.md
+  - DNS, the Address Book: dns-the-address-book.md
+  - Aliases and More Users: aliases-and-more-users.md
+  - Running It Day to Day: running-it-day-to-day.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

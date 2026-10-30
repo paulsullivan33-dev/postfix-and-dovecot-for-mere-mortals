@@ -1,0 +1,24 @@
+$ postfix -c pf/etc check   (silence means the configuration is sound)
+(exit 0)
+
+$ postconf -c pf/etc -n   (every setting that differs from the built-in default)
+alias_database = hash:/home/hatch/workspace/postfix-labwork/pf/etc/aliases
+alias_maps = hash:/home/hatch/workspace/postfix-labwork/pf/etc/aliases
+append_dot_mydomain = no
+biff = no
+compatibility_level = 3.6
+config_directory = /home/hatch/workspace/postfix-labwork/pf/etc
+home_mailbox = Maildir/
+inet_interfaces = 127.0.0.1
+inet_protocols = ipv4
+mail_owner = postfix
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+mydomain = example.org
+myhostname = mail.example.org
+mynetworks = 127.0.0.0/8
+myorigin = $mydomain
+readme_directory = no
+relayhost =
+setgid_group = postdrop
+smtpd_banner = $myhostname ESMTP Postfix
+(lab-only path settings — queue/data/command/daemon/shlib/meta/sendmail/maillog — omitted here; they point inside the lab folder)

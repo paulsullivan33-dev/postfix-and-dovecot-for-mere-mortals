@@ -1,0 +1,26 @@
+$ dpkg-deb -f on the downloaded packages (Package / Version)
+Package: dovecot-core Version: 1:2.3.21+dfsg1-2ubuntu6.5 
+Package: dovecot-imapd Version: 1:2.3.21+dfsg1-2ubuntu6.5 
+Package: libnsl2 Version: 1.3.0-3build3 
+Package: postfix Version: 3.8.6-1ubuntu0.1 
+
+$ postconf -c pf/etc mail_version
+mail_version = 3.8.6
+
+$ dovecot --version
+2.3.21 (47349e2482)
+
+$ openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj "/CN=mail.example.org" -keyout dove/key.pem -out dove/cert.pem
+(key and certificate written; key.pem then chmod 600)
+
+$ openssl x509 -in dove/cert.pem -noout -subject -issuer -dates
+subject=CN = mail.example.org
+issuer=CN = mail.example.org
+notBefore=Oct 30 04:03:47 2026 GMT
+notAfter=Oct 30 04:03:47 2027 GMT
+
+$ doveadm -c dove/dovecot.conf pw -s SHA512-CRYPT -p "lab-password-123"   (the lab password chosen for bob)
+{SHA512-CRYPT}$6$HipT0v9L8IUckMsS$SAiVftzl5EaScCZ3bGrz2kajWTM0NBfN6JgkFJp4aT4aW6wnCE7vVHSULO5iCwnvtLlmv872GFcartOyh5WIb/
+
+$ cat dove/users   (the passwd-file Dovecot reads: user:hash:uid:gid::home::)
+bob@example.org:{SHA512-CRYPT}$6$HipT0v9L8IUckMsS$SAiVftzl5EaScCZ3bGrz2kajWTM0NBfN6JgkFJp4aT4aW6wnCE7vVHSULO5iCwnvtLlmv872GFcartOyh5WIb/:1000:1000::/home/hatch/workspace/postfix-labwork/homes/bob::
